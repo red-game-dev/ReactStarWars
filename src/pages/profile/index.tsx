@@ -4,9 +4,9 @@ import { PageHeader, Result, Skeleton  } from 'antd';
 import { MultiCategoryDetails } from '@api/endpoints/profile';
 import { SearchCategory } from '@api/endpoints/search';
 import { useProfile } from '@hooks/profile/useProfile';
-import ProfileContent from '@components/profile/Content'
+import ProfileContent from '@components/profile/ProfileContent'
 import RelatedProfileTabs from "@components/profile/RelatedProfileTabs";
-import GeneralError from "../errors/general";
+import GeneralError from "@pages/errors/general";
 import { categoryToReadable } from "@utils/readable";
 
 const viewableCategories = Object.values(SearchCategory).filter((currentCategory) => currentCategory !== SearchCategory.ALL);

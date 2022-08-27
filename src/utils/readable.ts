@@ -1,4 +1,4 @@
-import { SearchCategory } from "../api/endpoints/search"
+import { SearchCategory } from "@api/endpoints/search"
 
 export const categoryToReadable = (category: string) => {
   switch (category) {

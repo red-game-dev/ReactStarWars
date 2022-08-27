@@ -1,8 +1,8 @@
 import type { RouteObject } from "react-router-dom";
-import NoMatch from '../pages/errors/404'
-import MainSearch from '../pages/search'
-import Profile from '../pages/profile'
-import SearchList from '../components/search/SearchList'
+import NoMatch from '@pages/errors/404'
+import MainSearch from '@pages/search'
+import Profile from '@pages/profile'
+import SearchList from '@components/search/SearchList'
 
 const routes: RouteObject[] = [
   {
