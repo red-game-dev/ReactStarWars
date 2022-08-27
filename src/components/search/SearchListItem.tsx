@@ -4,12 +4,12 @@ import { Skeleton, List  } from 'antd';
 import { MultiCategoryDetails } from '@api/endpoints/profile';
 
 interface SearchListItemStruct {
-  isLoading: boolean | undefined, 
+  isLoading?: boolean | undefined, 
   index: number;
   item: MultiCategoryDetails;
 }
 
-function SearchListItem({ isLoading = false, index, item }: SearchListItemStruct) {
+function SearchListItem({ isLoading, index, item }: SearchListItemStruct) {
   return (
   <List.Item>
     <Skeleton title={false} loading={isLoading} active>

@@ -5,15 +5,21 @@ import { useProfile } from '@hooks/profile/useProfile';
 import GeneralError from '@pages/errors/general';
 import { toCapitalize } from '@utils/text';
 
-function RelatedProfileList({ categories = [], profileId, list = [] }: any) {
+interface RelatedProfileListStruct {
+  categories?: string[]
+  profileId: number,
+  endpointsRelated: string[]
+}
+
+function RelatedProfileList({ categories = [], profileId, endpointsRelated = [] }: RelatedProfileListStruct) {
   let currentCategory: string | null = null;
 
-  const ids = list.map((endpoint: string) => {
+  const ids = endpointsRelated.map((endpoint: string) => {
     const [category, currentId] = endpoint.replace('https://swapi.dev/api', '').split('/').filter((item) => item);
     
     currentCategory = category;
 
-    return currentId;
+    return parseInt(currentId);
   })
 
 

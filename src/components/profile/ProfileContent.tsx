@@ -2,13 +2,20 @@ import { Descriptions } from 'antd';
 import { MultiCategoryDetails } from '@api/endpoints/profile';
 import { toCapitalize } from '@utils/text';
 
-const ProfileContent = ({ data = {} as Partial<MultiCategoryDetails>, column = 2 }) => (
+interface ProfileContentStruct {
+  data: {
+    [Property in keyof Partial<MultiCategoryDetails>]: Partial<MultiCategoryDetails>[Property];
+  },
+  column?: number
+}
+
+const ProfileContent = ({ data, column = 2 }: ProfileContentStruct) => (
   <Descriptions size="small" column={column}>
     {
       Object.keys(data)
-        .map((key: string, index: number) => 
-          <Descriptions.Item key={index} label={toCapitalize(key.replace(/([_])/gi, ' '))}>
-            {data[key as keyof MultiCategoryDetails] as string}
+        .map((key, index: number) => 
+          <Descriptions.Item key={index} label={toCapitalize(key.toString().replace(/([_])/gi, ' '))}>
+            {data[key as keyof MultiCategoryDetails]?.toString()}
           </Descriptions.Item>
         )
     }
