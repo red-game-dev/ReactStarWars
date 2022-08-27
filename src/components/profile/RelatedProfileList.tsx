@@ -5,6 +5,8 @@ import { useProfile } from '@hooks/profile/useProfile';
 import GeneralError from '@pages/errors/general'
 import { useProfileTableColumns } from '@hooks/profile/useProfileTableColumns';
 import { useProfileTableRows } from '@hooks/profile/useProfileTableRows';
+import { useGetProfileCategories } from '@hooks/profile/useGetProfileCategories';
+import { useGetProfileIds } from '@hooks/profile/useGetProfileIds';
 
 interface RelatedProfileListStruct {
   categories?: string[]
@@ -13,30 +15,20 @@ interface RelatedProfileListStruct {
 }
 
 function RelatedProfileList({ categories = [], profileId, endpointsRelated = [] }: RelatedProfileListStruct) {
-  let currentCategory: string | null = null;
-
-  const ids = endpointsRelated.map((endpoint: string) => {
-    const [category, currentId] = endpoint.replace('https://swapi.dev/api', '').split('/').filter((item) => item);
-    
-    currentCategory = category;
-
-    return parseInt(currentId);
-  })
-
+  const category = useGetProfileCategories(endpointsRelated);
+  const ids = useGetProfileIds(endpointsRelated);
 
   const { 
     isLoading,
     isError,
     data,
   } = useProfile<MultiCategoryDetails>({
-    category: currentCategory as unknown as SearchCategory,
+    category: category as unknown as SearchCategory,
     profileId,
     subIds: ids,
   });
   const displayData = useProfileTableRows(categories, data)
   const columns = useProfileTableColumns(categories, data)
-
-  console.log('data', data, displayData)
   
   if (isError) {
     return (<GeneralError />)
