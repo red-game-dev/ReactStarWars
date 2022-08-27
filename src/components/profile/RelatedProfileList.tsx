@@ -7,6 +7,7 @@ import { useProfileTableColumns } from '@hooks/profile/useProfileTableColumns';
 import { useProfileTableRows } from '@hooks/profile/useProfileTableRows';
 import { useGetProfileCategories } from '@hooks/profile/useGetProfileCategories';
 import { useGetProfileIds } from '@hooks/profile/useGetProfileIds';
+import { memo } from 'react';
 
 interface RelatedProfileListStruct {
   categories?: string[]
@@ -44,4 +45,4 @@ function RelatedProfileList({ categories = [], profileId, endpointsRelated = [] 
     }} />);
 }
 
-export default RelatedProfileList;
+export default memo(RelatedProfileList);
