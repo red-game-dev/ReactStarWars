@@ -8,6 +8,8 @@ import ProfileContent from '@components/profile/ProfileContent'
 import RelatedProfileTabs from "@components/profile/RelatedProfileTabs";
 import GeneralError from "@pages/errors/general";
 import { categoryToReadable } from "@utils/readable";
+import { useGetRelatedProfiles } from "@hooks/profile/useGetRelatedProfiles";
+import { useDisplayableDetails } from "@hooks/profile/useDisplayableDetails";
 
 const viewableCategories = Object.values(SearchCategory).filter((currentCategory) => currentCategory !== SearchCategory.ALL);
 
@@ -28,6 +30,12 @@ function Profile() {
     subIds: [profileId],
   });
 
+
+  const [currentProfile = {} as MultiCategoryDetails,] = data;
+
+  const relatedProfiles = useGetRelatedProfiles(viewableCategories, currentProfile)
+  const displayData = useDisplayableDetails(viewableCategories, currentProfile)
+
   const onErrorRetry = useCallback(() => {
     navigation(`/${category}/${id}`, {
       replace: true,
@@ -45,38 +53,6 @@ function Profile() {
   if (data.length === 0) {
     return (<Result title="Seems there is no data" />)
   }
-
-  const [currentProfile] = data;
-
-  const relatedProfiles = ([...viewableCategories, 'homeworld'] as unknown as (keyof MultiCategoryDetails)[])
-  .filter((item: keyof MultiCategoryDetails) => typeof currentProfile[item] === 'object' && ((currentProfile[item] || []) as string[]).length > 0)
-  .reduce((previous, currentValue) => {
-
-    if (!previous[currentValue]){
-      previous[currentValue] = [];
-    }
-
-    if (typeof currentProfile[currentValue] === 'string') {
-      previous[currentValue].push(...[currentProfile[currentValue] as string])
-    } else if (typeof currentProfile[currentValue] === 'object') {
-      previous[currentValue].push(...(currentProfile[currentValue] as string[] || []))
-    }
-
-    return previous;
-  }, {} as any)
-
-  const displayData = Object.keys(currentProfile)
-    .filter((key: string) => ![
-      ...viewableCategories,
-      'homeworld',
-      'url',
-      'name'
-    ].includes(key))
-    .reduce((previous: any, currentValue) => {
-      previous[currentValue] = currentProfile[currentValue as keyof MultiCategoryDetails];
-  
-      return previous;
-    }, {} as unknown as { [x: string]: string[] }) as Partial<MultiCategoryDetails>; 
 
   return (
     <PageHeader
