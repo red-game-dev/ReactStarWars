@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Descriptions } from 'antd';
 import { MultiCategoryDetails } from '@api/endpoints/profile';
 import { toCapitalize } from '@utils/text';
@@ -22,4 +23,4 @@ const ProfileContent = ({ data, column = 2 }: ProfileContentStruct) => (
   </Descriptions>
 );
 
-export default ProfileContent;
+export default memo(ProfileContent);
