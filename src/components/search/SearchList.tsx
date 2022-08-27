@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { List  } from 'antd';
 import { useSearch } from '@hooks/search/useSearch'
@@ -12,8 +12,8 @@ import SearchListItem from '@components/search/SearchListItem';
 
 function SearchList() {
   const { searchCategory } = useSearchCategory();
-  const { searchCanRefetch, setSearchCanRefetch } = useSearchCanRefetch();
   const { searchValue } = useSearchValue();
+  const { searchCanRefetch, setSearchCanRefetch } = useSearchCanRefetch();
   const navigation = useNavigate();
 
   const { 
@@ -29,11 +29,13 @@ function SearchList() {
 
   const onRenderSearchItem = useCallback((item: MultiCategoryDetails, index: number) => (<SearchListItem item={item} index={index} isLoading={isLoading} />), [isLoading])
 
-  if (searchCanRefetch && typeof remove === 'function') {
-    setSearchCanRefetch(false);
+  useEffect(() => {
+    if (searchCanRefetch && typeof remove === 'function') {
+      setSearchCanRefetch(false);
 
-    remove()
-  }
+      remove()
+    }
+  }, [remove, searchCanRefetch, searchCategory, setSearchCanRefetch])
   
   const onErrorRetry = useCallback(() => {
     navigation(`/search/${searchCategory}?search=${searchValue}`, {
@@ -58,4 +60,4 @@ function SearchList() {
   );
 }
 
-export default SearchList;
+export default memo(SearchList);

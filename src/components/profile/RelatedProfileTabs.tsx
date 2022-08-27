@@ -1,6 +1,7 @@
 import { Tabs  } from 'antd';
 import { toCapitalize } from '@utils/text';
 import RelatedProfileList from "@components/profile/RelatedProfileList";
+import { memo } from 'react';
 
 const { TabPane } = Tabs;
 
@@ -28,4 +29,4 @@ function RelatedProfileTabs({ currentCategory, profileId, categories, profiles }
   )
 } 
 
-export default RelatedProfileTabs;
+export default memo(RelatedProfileTabs);
