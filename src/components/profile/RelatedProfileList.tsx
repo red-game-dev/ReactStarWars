@@ -2,8 +2,9 @@ import { Table  } from 'antd';
 import { MultiCategoryDetails } from '@api/endpoints/profile';
 import { SearchCategory } from '@api/endpoints/search';
 import { useProfile } from '@hooks/profile/useProfile';
-import GeneralError from '@pages/errors/general';
-import { toCapitalize } from '@utils/text';
+import GeneralError from '@pages/errors/general'
+import { useProfileTableColumns } from '@hooks/profile/useProfileTableColumns';
+import { useProfileTableRows } from '@hooks/profile/useProfileTableRows';
 
 interface RelatedProfileListStruct {
   categories?: string[]
@@ -32,6 +33,10 @@ function RelatedProfileList({ categories = [], profileId, endpointsRelated = [] 
     profileId,
     subIds: ids,
   });
+  const displayData = useProfileTableRows(categories, data)
+  const columns = useProfileTableColumns(categories, data)
+
+  console.log('data', data, displayData)
   
   if (isError) {
     return (<GeneralError />)
@@ -40,44 +45,6 @@ function RelatedProfileList({ categories = [], profileId, endpointsRelated = [] 
   if (!data.length || isLoading) {
     return (<Table loading={isLoading} columns={[]} dataSource={[]} pagination={false} />)
   }
-
-  const displayData = data
-    .map((currentProfile: MultiCategoryDetails) => Object.keys(currentProfile)
-      .filter((key: string) => ![
-        ...categories,
-        'homeworld',
-        'characters',
-        'url',
-      ].includes(key))
-      .reduce((previous: any, currentValue) => {
-        previous[currentValue] = currentProfile[currentValue as keyof MultiCategoryDetails];
-        return previous;
-      }, {} as unknown as { [x: string]: string[] })
-    )
-    .map((currentProfile: MultiCategoryDetails, index) => ({
-      ...currentProfile,
-      key: `${(currentProfile.name || currentProfile.title || '').split(' ').join('-')}-${index}`,
-    })); 
-
-    const [currentProfile = [] as unknown as MultiCategoryDetails,] = data;
-
-    const columns = Object.keys(currentProfile)
-      .filter((key: string) => ![
-        ...categories,
-        'homeworld',
-        'characters',
-        'url',
-      ].includes(key))
-      .map((key, index) => ({
-        title: toCapitalize(key?.toString().replace(/([_])/gi, ' ')),
-        dataIndex: key,
-        key: `${key}-${index}`,
-        width: 'auto',
-        ellipsis: true,
-        fixed: true,
-    }));
-
-    console.log('displayData', displayData)
 
   return (<Table columns={columns} dataSource={displayData} 
     pagination={{
