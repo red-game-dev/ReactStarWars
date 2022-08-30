@@ -1,29 +1,13 @@
-import axios, { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
+import { createApiFetcher } from 'axios-multi-api';
 
-const api = axios.create({
-  baseURL: 'https://swapi.dev/api',
-})
-
-api.interceptors.request.use(
-  (axiosConfig: AxiosRequestConfig) => {
-    // TODO: This used to add a locale and/or authorization header
-
-    return axiosConfig;
-  },
-  (error: AxiosError) => {
-    return Promise.reject(error)
-  }
-)
-
-api.interceptors.response.use(
-  (response: AxiosResponse) => { 
-    return response;
-  },
-  (error: AxiosError) => { 
-    // TODO: This to handle refresh token error later on
-
-    return Promise.reject(error)
-  }
-)
+const api = createApiFetcher({
+    apiUrl: 'https://swapi.dev/api',
+    strategy: 'reject',
+    apiEndpoints: {
+      getPosts: {
+        url: '/posts/:subject',
+      },
+    }
+});
 
 export default api;
