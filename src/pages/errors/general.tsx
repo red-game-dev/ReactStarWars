@@ -1,6 +1,6 @@
 import { Button, Result  } from 'antd';
 
-function GeneralError({ onRetry = () => {} }) {
+const GeneralError = ({ onRetry = () => {} }) => {
   return (
     <Result
       status="error"

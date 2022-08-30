@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { SearchCategory } from "@api/endpoints/search"
-import { getProfile } from "@api/endpoints/profile"
+import { getProfiles } from "@api/endpoints/profile"
 
 export type UseProfileParams = {
   category: SearchCategory
@@ -17,6 +17,13 @@ interface UseProfileResponse<Item> {
   remove?: () => void,
 }
 
+/**
+ * useSearch is a hook that handles the api request to get the related search result if any
+ * @param {string=} category The categroy to search with
+ * @param {string} profileId The profile id this is related to
+ * @param {number[]} subIds The sub ids related to the profile
+ * @returns {UseSearchResponse<Item>} The result fo this request
+ */
 export const useProfile = <Item>({ category, profileId, subIds }: UseProfileParams): UseProfileResponse<Item> => {
   const { 
     isLoading: isProfileLoading, 
@@ -24,7 +31,7 @@ export const useProfile = <Item>({ category, profileId, subIds }: UseProfilePara
     error,
     isFetching, 
     remove,
-  } = useQuery([`${category}-${profileId}`], () => getProfile<Item>({ category, ids: subIds }), {
+  } = useQuery([`${category}-${profileId}`], () => getProfiles<Item>({ category, ids: subIds }), {
     initialData: [],
     initialDataUpdatedAt: Date.now(),
     enabled: Boolean(category && profileId && subIds.length),

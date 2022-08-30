@@ -14,7 +14,7 @@ import useSearchCanRefetch from '@hooks/search/atoms/useSearchCanRefetch';
 
 const { Search } = Input;
 
-function MainSearch() {
+const MainSearch = () => {
   const { searchValue, setSearchValue } = useSearchValue();
   const { setSearchCanRefetch } = useSearchCanRefetch();
   const { searchCategory, setSearchCategory } = useSearchCategory();

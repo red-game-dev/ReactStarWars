@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Link } from "react-router-dom";
 import { Skeleton, List  } from 'antd';
 import { MultiCategoryDetails } from '@api/endpoints/profile';
-import { useGetProfileEpisodesIds } from '@hooks/profile/useGetProfileEpisodeIds';
+import { useGetProfileEpisodesIds } from '@hooks/profile/useGetProfileEpisodesIds';
 
 interface SearchListItemStruct {
   isLoading?: boolean | undefined, 
@@ -10,7 +10,7 @@ interface SearchListItemStruct {
   item: MultiCategoryDetails;
 }
 
-function SearchListItem({ isLoading, index, item }: SearchListItemStruct) {
+const SearchListItem = ({ isLoading, index, item }: SearchListItemStruct) => {
   const episodesIds = useGetProfileEpisodesIds(item.films);
 
   return (

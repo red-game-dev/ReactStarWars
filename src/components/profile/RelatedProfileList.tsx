@@ -15,7 +15,7 @@ interface RelatedProfileListStruct {
   endpointsRelated: string[]
 }
 
-function RelatedProfileList({ categories = [], profileId, endpointsRelated = [] }: RelatedProfileListStruct) {
+const RelatedProfileList = ({ categories = [], profileId, endpointsRelated = [] }: RelatedProfileListStruct) => {
   const category = useGetProfileCategories(endpointsRelated);
   const ids = useGetProfileIds(endpointsRelated);
 

@@ -4,10 +4,10 @@ type UseDisplayableDetailsStruct = (MultiCategoryDetails & {
   key: string
 })
 
-export const useDisplayableDetails = (viewableCategories: string[], currentProfile: MultiCategoryDetails): UseDisplayableDetailsStruct => {
+export const useDisplayableDetails = (excludedCategories: string[], currentProfile: MultiCategoryDetails): UseDisplayableDetailsStruct => {
   return Object.keys(currentProfile)
     .filter((key: string) => ![
-      ...viewableCategories,
+      ...excludedCategories,
       'homeworld',
       'url',
       'characters',

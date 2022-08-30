@@ -1,5 +1,8 @@
 import axios, { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
 
+/**
+ * @documentation https://axios-http.com/docs/intro
+ */
 const api = axios.create({
   baseURL: 'https://swapi.dev/api',
 })

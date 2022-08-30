@@ -1,6 +1,11 @@
 import { SearchCategory } from "@api/endpoints/search"
 
-export const categoryToReadable = (category: string) => {
+/**
+ * Get the category translated | This is not best way of doing it
+ * @param {string} category The category to be translated
+ * @returns {string} The category phrase translated
+ */
+export const categoryToSingularHumanReadable = (category: string) => {
   switch (category) {
     case SearchCategory.PEOPLE:
       return 'Person'
@@ -10,6 +15,12 @@ export const categoryToReadable = (category: string) => {
       return 'Starship'
     case SearchCategory.VEHICLES:
       return 'Vehicle'
+    case SearchCategory.SPECIES:
+      return 'Species'
+    case SearchCategory.PILOTS:
+      return 'Pilot'
+    case SearchCategory.PLANETS:
+      return 'Planet'
     default:
       return 'Unknown'
   }

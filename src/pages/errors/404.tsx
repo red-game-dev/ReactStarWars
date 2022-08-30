@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Result  } from 'antd';
 
-function NoMatch() {
+const NoMatch = () => {
   const navigation = useNavigate();
 
   return (

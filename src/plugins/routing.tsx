@@ -4,6 +4,9 @@ import MainSearch from '@pages/search'
 import Profile from '@pages/profile'
 import SearchList from '@components/search/SearchList'
 
+/**
+ * @documentation https://reactrouter.com/en/main
+ */
 const routes: RouteObject[] = [
   {
     path: "/",

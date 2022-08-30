@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { List  } from 'antd';
 import { useSearch } from '@hooks/search/useSearch'
@@ -10,7 +10,7 @@ import useSearchCanRefetch from '@hooks/search/atoms/useSearchCanRefetch';
 import GeneralError from '@pages/errors/general';
 import SearchListItem from '@components/search/SearchListItem';
 
-function SearchList() {
+const SearchList = () => {
   const { searchCategory } = useSearchCategory();
   const { searchValue } = useSearchValue();
   const { searchCanRefetch, setSearchCanRefetch } = useSearchCanRefetch();

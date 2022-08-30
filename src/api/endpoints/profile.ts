@@ -7,7 +7,7 @@ export type BaseDetail = {
   readonly homeworld: string
   readonly films: string[]
   readonly species: string[]
-  readonly vechiles: string[]
+  readonly vehicles: string[]
   readonly starships: string[]
 	readonly url: string
 	readonly created: Date
@@ -74,9 +74,16 @@ export type GetProfileParams = {
   ids: number[]
 }
 
-
-export const getProfile = async <Item>({ category, ids }: GetProfileParams) => {
-  if (!ids.length) {
+/**
+ * Get the profiles according
+ * @param {Object} profile - The profiles to be requested
+ * @param {number[]} profile.ids - The list of ids to be requested by
+ * @param {string} profile.category - The category involved to call current specific profile.
+ * @example await getProfiles<Person>({ category: 'person', ids: [1,5,6] });
+ * @returns {Promise<ProfileResponse<Item>>}
+ */
+export const getProfiles = async <Item>({ category, ids }: GetProfileParams) => {
+  if (!ids || !ids.length) {
     return Promise.reject({
       message: 'IDs is required',
     })

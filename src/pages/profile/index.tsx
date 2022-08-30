@@ -7,13 +7,14 @@ import { useProfile } from '@hooks/profile/useProfile';
 import ProfileContent from '@components/profile/ProfileContent'
 import RelatedProfileTabs from "@components/profile/RelatedProfileTabs";
 import GeneralError from "@pages/errors/general";
-import { categoryToReadable } from "@utils/readable";
+import { categoryToSingularHumanReadable } from "@utils/readable";
 import { useGetRelatedProfiles } from "@hooks/profile/useGetRelatedProfiles";
 import { useDisplayableDetails } from "@hooks/profile/useDisplayableDetails";
 
 const viewableCategories = Object.values(SearchCategory).filter((currentCategory) => currentCategory !== SearchCategory.ALL);
+const excludedCategories = Object.values(SearchCategory).filter((currentCategory) => currentCategory !== SearchCategory.ALL);
 
-function Profile() {
+const Profile = () => {
   let { id } = useParams<"id">();
   let { category = '' } = useParams<"category">();
   const navigation = useNavigate();
@@ -34,7 +35,7 @@ function Profile() {
   const [currentProfile = {} as MultiCategoryDetails,] = data;
 
   const relatedProfiles = useGetRelatedProfiles(viewableCategories, currentProfile)
-  const displayData = useDisplayableDetails(viewableCategories, currentProfile)
+  const displayData = useDisplayableDetails(excludedCategories, currentProfile)
 
   const onErrorRetry = useCallback(() => {
     navigation(`/${category}/${id}`, {
@@ -57,7 +58,7 @@ function Profile() {
   return (
     <PageHeader
         title={currentProfile.name || currentProfile.title}
-        subTitle={`A ${categoryToReadable(category)}`}
+        subTitle={`A ${categoryToSingularHumanReadable(category)}`}
         footer={<RelatedProfileTabs currentCategory={category} categories={viewableCategories} profileId={profileId} profiles={relatedProfiles} />}
       >
         <ProfileContent data={displayData} />

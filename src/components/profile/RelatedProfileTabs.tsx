@@ -14,7 +14,7 @@ interface RelatedProfileTabsStruct {
   }
 }
 
-function RelatedProfileTabs({ currentCategory, profileId, categories, profiles }: RelatedProfileTabsStruct) {
+const RelatedProfileTabs = ({ currentCategory, profileId, categories, profiles }: RelatedProfileTabsStruct) => {
   return (
     <Tabs defaultActiveKey="1">
       {

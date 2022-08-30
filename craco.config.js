@@ -1,15 +1,21 @@
-const path = require(`path`);
+const {CracoAliasPlugin } = require('react-app-rewire-alias')
+
+const aliasMap = {
+  "@components": "src/components",
+  "@pages": "src/pages",
+  "@hooks": "src/hooks",
+  "@plugins": "src/plugins",
+  "@services": "src/services",
+  "@utils": "src/utils",
+  "@api": "src/api",
+  "@app": "src",
+}
 
 module.exports = {
-  webpack: {
-    alias: {
-      "@components": path.resolve(__dirname, "src/components"),
-      "@pages": path.resolve(__dirname, "src/pages"),
-      "@hooks": path.resolve(__dirname, "src/hooks"),
-      "@plugins": path.resolve(__dirname, "src/plugins"),
-      "@services": path.resolve(__dirname, "src/services"),
-      "@utils": path.resolve(__dirname, "src/utils"),
-      "@api": path.resolve(__dirname, "src/api"),
-    },
-  },
+  plugins: [
+    {
+      plugin: CracoAliasPlugin,
+      options: {alias: aliasMap }
+    }
+  ],
 };

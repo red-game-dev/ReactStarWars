@@ -12,16 +12,17 @@ interface UserProfileTableColumnStruct {
 
 type UseProfileTableColumnsStruct = UserProfileTableColumnStruct[]
 
-export const useProfileTableColumns = (categories: string[], data: MultiCategoryDetails[]): UseProfileTableColumnsStruct => {
+export const useProfileTableColumns = (excludedCategories: string[], data: MultiCategoryDetails[]): UseProfileTableColumnsStruct => {
   const [columnDetails = {} as MultiCategoryDetails] = data;
 
   return Object.keys(columnDetails)
     .filter((key: string) => ![
-      ...categories,
+      ...excludedCategories,
       'homeworld',
       'characters',
       'url',
     ].includes(key))
+    .filter((key) => key)
     .map((key, index) => ({
       title: toCapitalize(key?.toString().replace(/([_])/gi, ' ')),
       dataIndex: key,

@@ -1,86 +1,72 @@
-# Coding Assignment
-The goal of this assignment is to build a small React application that lets you search and display information from the Star Wars movies (no knowledge of SW is required). The data needed will be queried from [SWAPI (Star Wars API)](https://swapi.dev/) which is an open testing API.
+# Task Completed
 
-## Overview
-The app should consist of a front page with a centered search box where you can type a search string and get matching results. Clicking on a result should route to a new page with the search box on top and details about the query underneath.
+First of all, thank you for waiting for this much time, unforunately had endless of queries, travel, work, loan, bank, notary related matters which left me with little time back than. The task has been completed, along with the extra bonus points asked. Below will add the list of things introduced along this project.
 
-### Searching
-The search box will be used to query information about people, planets, starships and vehicles. Beneath the search box there should be five radio buttons:
-* All (default)
-* People
-* Planets
-* Starships
-* Vehicles
+## @tanstack/react-query
 
-You should use the existing `/search` endpoints for each category (see: https://swapi.dev/documentation#search).
-The default behaviour (All) should be to query all four search endpoints and display all results.
+This is used to handle the api requests hooks and as well the caching to prevent extra requests unneeded, especially for data that usually doesn't change much. Having redis is important on the backend, yet the frontend should as well cache what is needed to be cached.
 
-### Search results
-The search result page should have the whole search form at the top and the list with results beneath it (much like any other search engine, like google or duckduckgo).
-Combined results (`All` selected) should be ordered by category whith the category with most results appearing at the top.
+Further more you can see the plugin configuration at `@plugins/QueryClient`
 
-Each result entry should be listed with it's `name` property taken from the result plus a list of the films in which it appears (provided in the result).
-So a result for a search with `query=luke` should look something like:
+## beautiful-react-hooks
 
-```
-Luke Sywalker (appears in: 4, 5, 6, 3)
-```
-Where (4, 5, 6, 3) are the `episode_id`s of the films the character appears in. (Don't worry if the results are not up to date as of 2020)
+Set of hooks that allow us to use general usage hooks such as `useThrottledCallback`, `useDebouceCallback`, `useDidMount`, and many others are avaialble at their docs.
 
-Generally the useful information from the search response for a single entry is as follows:
+## craco
 
-```
-{
-  "count": 1,
-    ...
-  "results": [
-    {
-      "name": "Luke Skywalker",
-        ...
-      "films": [
-        "http://swapi.dev/api/films/1/",
-        "http://swapi.dev/api/films/2/",
-        "http://swapi.dev/api/films/3/",
-        "http://swapi.dev/api/films/6/"
-      ],
-        ...
-      "url": "http://swapi.dev/api/people/1/"
-    }
-  ]
-}
-```
- Note: Pagination is not required, but feel free to add more details into the search result entry at your discretion, making anything better will give you bonus points.
+This one would say it is very essential for the following reasons
 
-### Detailed view
-Each search result entry should be a link routing to a page having the search form at the top and details about the entry beneath it. The url should correspond to the search result entry, so that the the page can be accessed separately. For example if the search result entry url is `http://swapi.dev/api/people/1/` our url should also be `people/1`. 
-The details displayed should be simple key value pairs displayed as a table (or similar) plus the films in which the thing or person apears in e.g.:
+- Handles webpack matters without the need to eject the app whne using create react app
+- Further Jest configuration + `react-app-rewire-alias` for alias
+- Generally used for alias in our case for @name/*
 
->  **Name:** Luke Skywalker
->  **Height:** 172
->  **Hair color:** blond
->  **Skin color:** fair
->  **Eye color:** blue
->  **Gender:** male
->  **Movies:** A New Hope, The Empire Strikes Back, Return of the Jedi
+## React Routing Dom
 
-It is not required to include all fields from the result, just a reasonable amount. You get bonus points for displaying information requiring to poll other endpoints (like `Movies` in the example above)
+We'll know what it is for, and I'm using it for the routing, along with few hooks that we need such as `useNavigation` and `useParams`, you can find it as well used as a hook in `useNavQuery`
 
-**Extra Bonus**: Incorporate the detailed view to the side of the search results page implementing a master-detail pattern while also keeping the route to the detail view page.
+## Axios
 
-## Technical details
+Use this for our api requests handler, which will be combined later with @transtack/react-query hooks
 
-## Requirements
-The only strict requirements we pose are that the app is written in **typescript** using the latest version of React. We recommend the use of react patterns wherever meaningful of course, and be prepared to show and explain them when presenting the solution.
+## antd
 
-### Project Setup
-Please setup the application in a way that we can start it by simply running `npm start` or else provide a simple `start.sh` script.
+Used this for design, yet generally I do not use this, first of all I do not really use chinese libs, due of certain events acquired around the world. Although the lib is used by many and is amazing, yet got althernatives to it which they're twice as much better.
 
-### SWAPI
-The [SWAPI](https://swapi.dev/) API is a free service and has a 10,000 requests per day rate limiting. Please make sure you don't abuse it.
-Note that in some of the results the URLs returned start with `http` which is wrong and should be modified to `https` for them to work, make sure you handle this correctly.
+## recoil
 
-### External Libraries
-We don't mind if you use whatever external libraries you like.
+Used this for state, which allows cross state component, aka state management. One of good things about it, it is as well minimal
 
-### Estimation
-You will see an open issue "Call for estimation". Please estimate by writing a comment  when you think the task will be ready before you start. We don't set any hard deadlines.
+## Tests
+
+Added tests generally for the following
+
+- Testing utils
+- Testing hooks
+- Testing main app - Could add more for pages if required
+
+## Structure
+
+Aimed to provide a good structure for this project, since it is small project as well.
+
+## Architecture
+
+The general architecture of how everything is split and designed is to simplify everything as much as possible and remain performant. Introducing of reusability is in place, yet is not too much, as would be tiedly coupled later and would make it bigger problem to split and/or fix if any issue happens. Keep code simple and readable, in fact max of lines doesnt exceed 100 lines for no file.
+
+## Full Typescript support
+
+The whole project is full typescript support, including interfaces of the api.
+
+## Futher improvements that could have been introduced
+
+- ESlint
+- Storyboard
+- Further more tests, especially components testing
+- Design could have been made more attractive, yet I believe in this task one of most important queries is the performance, as we know react anyone can write it, but not everyone can write it properly, which can end up with endless performance issues.
+- Try and reduce more packages from the package, yet kept it to minimum, in fact the maximum a bit of extra package would be `beatiful-react-hooks`.
+
+## Cheers
+
+Cheers for the test, looking forward to hear from you
+
+Best regards,
+Red

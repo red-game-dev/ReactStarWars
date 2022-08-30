@@ -4,10 +4,10 @@ type UseProfileTableRowsStruct = (MultiCategoryDetails & {
   key: string
 })[]
 
-export const useProfileTableRows = (viewableCategories: string[], data: MultiCategoryDetails[], max?: number): UseProfileTableRowsStruct => {
+export const useProfileTableRows = (excludedCategories: string[], data: MultiCategoryDetails[], max?: number): UseProfileTableRowsStruct => {
   return data.map((currentProfile: MultiCategoryDetails) => Object.keys(currentProfile)
     .filter((key: string) => ![
-      ...viewableCategories,
+      ...excludedCategories,
       'homeworld',
       'url',
       'characters',
