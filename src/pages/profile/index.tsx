@@ -4,14 +4,17 @@ import { PageHeader, Result, Skeleton  } from 'antd';
 import { MultiCategoryDetails } from '@api/endpoints/profile';
 import { SearchCategory } from '@api/endpoints/search';
 import { useProfile } from '@hooks/profile/useProfile';
-import ProfileContent from '@components/profile/Content'
+import ProfileContent from '@components/profile/ProfileContent'
 import RelatedProfileTabs from "@components/profile/RelatedProfileTabs";
-import GeneralError from "../errors/general";
-import { categoryToReadable } from "@utils/readable";
+import GeneralError from "@pages/errors/general";
+import { categoryToSingularHumanReadable } from "@utils/readable";
+import { useGetRelatedProfiles } from "@hooks/profile/useGetRelatedProfiles";
+import { useDisplayableDetails } from "@hooks/profile/useDisplayableDetails";
 
 const viewableCategories = Object.values(SearchCategory).filter((currentCategory) => currentCategory !== SearchCategory.ALL);
+const excludedCategories = Object.values(SearchCategory).filter((currentCategory) => currentCategory !== SearchCategory.ALL);
 
-function Profile() {
+const Profile = () => {
   let { id } = useParams<"id">();
   let { category = '' } = useParams<"category">();
   const navigation = useNavigate();
@@ -27,6 +30,12 @@ function Profile() {
     profileId,
     subIds: [profileId],
   });
+
+
+  const [currentProfile = {} as MultiCategoryDetails,] = data;
+
+  const relatedProfiles = useGetRelatedProfiles(viewableCategories, currentProfile)
+  const displayData = useDisplayableDetails(excludedCategories, currentProfile)
 
   const onErrorRetry = useCallback(() => {
     navigation(`/${category}/${id}`, {
@@ -46,42 +55,10 @@ function Profile() {
     return (<Result title="Seems there is no data" />)
   }
 
-  const [currentProfile] = data;
-
-  const relatedProfiles = ([...viewableCategories, 'homeworld'] as unknown as (keyof MultiCategoryDetails)[])
-  .filter((item: keyof MultiCategoryDetails) => typeof currentProfile[item] === 'object' && ((currentProfile[item] || []) as string[]).length > 0)
-  .reduce((previous, currentValue) => {
-
-    if (!previous[currentValue]){
-      previous[currentValue] = [];
-    }
-
-    if (typeof currentProfile[currentValue] === 'string') {
-      previous[currentValue].push(...[currentProfile[currentValue] as string])
-    } else if (typeof currentProfile[currentValue] === 'object') {
-      previous[currentValue].push(...(currentProfile[currentValue] as string[] || []))
-    }
-
-    return previous;
-  }, {} as any)
-
-  const displayData = Object.keys(currentProfile)
-    .filter((key: string) => ![
-      ...viewableCategories,
-      'homeworld',
-      'url',
-      'name'
-    ].includes(key))
-    .reduce((previous: any, currentValue) => {
-      previous[currentValue] = currentProfile[currentValue as keyof MultiCategoryDetails];
-  
-      return previous;
-    }, {} as unknown as { [x: string]: string[] }) as Partial<MultiCategoryDetails>; 
-
   return (
     <PageHeader
         title={currentProfile.name || currentProfile.title}
-        subTitle={`A ${categoryToReadable(category)}`}
+        subTitle={`A ${categoryToSingularHumanReadable(category)}`}
         footer={<RelatedProfileTabs currentCategory={category} categories={viewableCategories} profileId={profileId} profiles={relatedProfiles} />}
       >
         <ProfileContent data={displayData} />

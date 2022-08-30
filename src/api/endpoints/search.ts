@@ -23,6 +23,17 @@ export type GetSearchParams = {
   searchValue: string
 }
 
+/**
+ * Get the profiles according
+ * @param {Object} search - The profiles to be requested
+ * @param {string} search.searchValue - The value to search with
+ * @param {string=} search.category - The category to search from
+ * @example // All profiles to be searched 
+ * await getSearch<Person>({ searchValue: 'luke' }); 
+ * @example // Person profiles to be searched 
+ * await getSearch<Person>({ category: SearchCategory.PERSON, searchValue: 'luke' }); 
+ * @returns {Promise<ProfileResponse<Item>>}
+ */
 export const getSearch = async <Item>({ category = SearchCategory.ALL, searchValue }: GetSearchParams) => {
   if (!searchValue) {
     return Promise.reject({

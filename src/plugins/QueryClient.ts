@@ -1,6 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { isApiError }from '../utils/api'
+import { isApiError }from '@utils/api'
+
+/**
+ * @documentation https://tanstack.com/query/v4/?from=reactQueryV3&original=https://react-query-v3.tanstack.com/
+ */
 
 const queryClient = new QueryClient({
   defaultOptions: {

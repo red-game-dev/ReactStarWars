@@ -1,18 +1,20 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { Outlet, useParams, useNavigate } from "react-router-dom";
 import type { RadioChangeEvent } from 'antd';
 import { Radio, Input  } from 'antd';
 import {  SearchCategory } from '@api/endpoints/search';
 import useSearchCategory from '@hooks/search/atoms/useSearchCategory';
 import useSearchValue from '@hooks/search/atoms/useSearchValue';
-import { useMount, useThrottleFn, useDebounceEffect } from 'ahooks';
+import useDidMount from 'beautiful-react-hooks/useDidMount';
+import useThrottledCallback from 'beautiful-react-hooks/useThrottledCallback';
+import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback';
 import { useNavQuery } from '@hooks/navigation/useNavQuery';
 import useSearchCanRefetch from '@hooks/search/atoms/useSearchCanRefetch';
 
 
 const { Search } = Input;
 
-function MainSearch() {
+const MainSearch = () => {
   const { searchValue, setSearchValue } = useSearchValue();
   const { setSearchCanRefetch } = useSearchCanRefetch();
   const { searchCategory, setSearchCategory } = useSearchCategory();
@@ -20,7 +22,7 @@ function MainSearch() {
   const { search: querySearchValue } = useNavQuery('search');
   const navigation = useNavigate();
 
-  useMount(() => {
+  useDidMount(() => {
     if (category) {
       setSearchCategory(category as SearchCategory)
     }
@@ -36,7 +38,7 @@ function MainSearch() {
     }
   })
 
-  const { run: onChange } = useThrottleFn(
+  const onChange = useThrottledCallback(
     (e: RadioChangeEvent) => {
       const newCategory = e.target.value;
       
@@ -48,10 +50,9 @@ function MainSearch() {
         });
       }
     },
-    { wait: 500 },
   );
 
-  useDebounceEffect(
+  useDebouncedCallback(
     () => {
       setSearchCanRefetch(category !== searchCategory || searchValue !== querySearchValue)
 
@@ -62,7 +63,6 @@ function MainSearch() {
       }
     },
     [searchValue, querySearchValue, category, searchCategory],
-    { wait: 1000 },
   );
 
   const onSearch = useCallback((value: string) => {

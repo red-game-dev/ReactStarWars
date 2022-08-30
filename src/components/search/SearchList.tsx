@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import { Skeleton, List  } from 'antd';
+import { memo, useCallback, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { List  } from 'antd';
 import { useSearch } from '@hooks/search/useSearch'
 import { MultiCategoryDetails } from '@api/endpoints/profile';
 import { SearchCategory } from '@api/endpoints/search';
@@ -8,11 +8,12 @@ import useSearchCategory from '@hooks/search/atoms/useSearchCategory';
 import useSearchValue from '@hooks/search/atoms/useSearchValue';
 import useSearchCanRefetch from '@hooks/search/atoms/useSearchCanRefetch';
 import GeneralError from '@pages/errors/general';
+import SearchListItem from '@components/search/SearchListItem';
 
-function SearchList() {
+const SearchList = () => {
   const { searchCategory } = useSearchCategory();
-  const { searchCanRefetch, setSearchCanRefetch } = useSearchCanRefetch();
   const { searchValue } = useSearchValue();
+  const { searchCanRefetch, setSearchCanRefetch } = useSearchCanRefetch();
   const navigation = useNavigate();
 
   const { 
@@ -26,11 +27,15 @@ function SearchList() {
     canRefetch: searchCanRefetch,
   });
 
-  if (searchCanRefetch && typeof remove === 'function') {
-    setSearchCanRefetch(false);
+  const onRenderSearchItem = useCallback((item: MultiCategoryDetails, index: number) => (<SearchListItem item={item} index={index} isLoading={isLoading} />), [isLoading])
 
-    remove()
-  }
+  useEffect(() => {
+    if (searchCanRefetch && typeof remove === 'function') {
+      setSearchCanRefetch(false);
+
+      remove()
+    }
+  }, [remove, searchCanRefetch, searchCategory, setSearchCanRefetch])
   
   const onErrorRetry = useCallback(() => {
     navigation(`/search/${searchCategory}?search=${searchValue}`, {
@@ -50,19 +55,9 @@ function SearchList() {
         disabled: !data || isLoading || !data?.length
       }}
       dataSource={data}
-      renderItem={(item: MultiCategoryDetails, index) => (
-        <List.Item>
-          <Skeleton title={false} loading={isLoading} active>
-            <List.Item.Meta
-              key={index}
-              title={<Link to={`${item.url?.replace('https://swapi.dev/api', '')}`}>{item.name || item.title}</Link> }
-              description={(item.films && `Appears in episodes ${item.films?.map((item) => item.match(/\d+/)).join(', ')}`) || 'No episodes founds'}
-            />
-          </Skeleton>
-        </List.Item>
-      )}
+      renderItem={onRenderSearchItem}
     />
   );
 }
 
-export default SearchList;
+export default memo(SearchList);

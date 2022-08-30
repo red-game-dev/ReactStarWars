@@ -16,6 +16,14 @@ interface UseSearchResponse<Item> {
   remove?: () => void,
 }
 
+/**
+ * useSearch is a hook that handles the api request to get the related search result if any
+ * @param {Object} search A new instance of searching request
+ * @param {string=} category The categroy to search with
+ * @param {string} searchValue The value to be searched
+ * @param {boolean=} canRefetch If this value should be forcefully refetched & clear cache
+ * @returns {UseSearchResponse<Item>} The result fo this request
+ */
 export const useSearch = <Item>({ category, searchValue, canRefetch }: UseSearchParams): UseSearchResponse<Item> => {
   const { 
     isLoading: isSearchLoading, 
